@@ -1,8 +1,8 @@
-# Standard Readme
+# Simple autonomous robot for License Thesis
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-A standard style for README files
+Autonomous robots are starting to gain higher and higher influence in agriculture ...
 
 Your README file is normally the first entry point to your code. It should tell people why they should use your module, how they can install it, and how they can use it. Standardizing how you write your README makes creating and maintaining your READMEs easier. Great documentation takes work!
 
@@ -55,6 +55,14 @@ The goals for this repository are:
 3. A **linter** that can be used to look at errors in a given Readme. Please refer to the [tracking issue](https://github.com/RichardLitt/standard-readme/issues/5).
 4. A **generator** that can be used to quickly scaffold out new READMEs. See [generator-standard-readme](https://github.com/RichardLitt/generator-standard-readme).
 5. A **compliant badge** for users. See [the badge](#badge).
+
+## Prerequisites
+
+The project is based on the [Robot Operaing System's](https://www.ros.org/)  [Melodic Distro](http://wiki.ros.org/melodic). One should start with the installation steps provided by the ROS platform. The recommended OS is [Ubuntu 18.04](https://releases.ubuntu.com/18.04/) for the Master PC and [JetPack 4.6] for the Jetson Nano since it has been tested only in this configuration, but it should be working fine on other Linux-based systems too.
+
+On the Hardware side, I was working with a [Jetson Nano Dev Kit](https://developer.nvidia.com/embedded/jetson-nano-developer-kit) used for controlling the robotic platform, which is a [Turtlebot3 Waffle](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/) completed by the [OpenManipulator-X](https://emanual.robotis.com/docs/en/platform/openmanipulator_x/overview/) robotic arm. In addition, I use an [Intel Realsense D435i Depth Camera](https://www.intelrealsense.com/depth-camera-d435i/) for customized object detection and getting the object's coordinates.
+
+
 
 ## Install
 
