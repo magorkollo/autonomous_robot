@@ -20,6 +20,7 @@ Standard Readme is designed for open source libraries. Although it’s [historic
 ## Table of Contents
 
 - [Background](#background)
+- [Prerequisites](#prerequisites)
 - [Install](#install)
 - [Usage](#usage)
 	- [Generator](#generator)
