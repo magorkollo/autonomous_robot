@@ -61,16 +61,18 @@ The goals for this repository are:
 
 The project is based on the [Robot Operaing System's](https://www.ros.org/)  [Melodic Distro](http://wiki.ros.org/melodic). One should start with the installation steps provided by the ROS platform. The recommended OS is [Ubuntu 18.04](https://releases.ubuntu.com/18.04/) for the Master PC and [JetPack 4.6] for the Jetson Nano since it has been tested only in this configuration, but it should be working fine on other Linux-based systems too.
 
-On the Hardware side, I was working with a [Jetson Nano Dev Kit](https://developer.nvidia.com/embedded/jetson-nano-developer-kit) used for controlling the robotic platform, which is a [Turtlebot3 Waffle](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/) completed by the [OpenManipulator-X](https://emanual.robotis.com/docs/en/platform/openmanipulator_x/overview/) robotic arm. In addition, I use an [Intel Realsense D435i Depth Camera](https://www.intelrealsense.com/depth-camera-d435i/) for customized object detection and getting the object's coordinates.
+On the Hardware side, I was working with a [Jetson Nano Dev Kit](https://developer.nvidia.com/embedded/jetson-nano-developer-kit) used for controlling the robotic platform, which is a [Turtlebot3 Waffle](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/) completed by the [OpenManipulator-X](https://emanual.robotis.com/docs/en/platform/openmanipulator_x/overview/) robotic arm. In addition, I use an [Intel Realsense D435i Depth Camera](https://www.intelrealsense.com/depth-camera-d435i/) for customized object detection and getting the object's coordinates in 3D space.
 
 
 
 ## Install
 
-This project uses [node](http://nodejs.org) and [npm](https://npmjs.com). Go check them out if you don't have them locally installed.
+### D435i Depth Camera
+
+For using the camera one should install the realsense2 SDK's [ROS wrapper](https://github.com/IntelRealSense/realsense-ros) by typing:
 
 ```sh
-$ npm install --global standard-readme-spec
+$ sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
 ```
 
 ## Usage
