@@ -75,6 +75,14 @@ For using the camera one should install the realsense2 SDK's [ROS wrapper](https
 $ sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
 ```
 
+Moreover, the [Python wrapper](https://pypi.org/project/pyrealsense2/) for the Intel RealSense SDK2.0 is also needed, which provides C++ to Python binding (maybe at some point I am going to use C++ instead of Python)
+
+```sh
+$ sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
+```
+
+
+
 ## Usage
 
 This is only a documentation package. You can print out [spec.md](spec.md) to your console:
