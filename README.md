@@ -64,6 +64,7 @@ On the Hardware side, I was working with a [Jetson Nano Dev Kit](https://develop
 
 
 
+
 ## Install
 
 ### D435i Depth Camera
@@ -72,6 +73,12 @@ For using the camera one should install the realsense2 SDK's [ROS wrapper](https
 
 ```sh
 $ sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
+```
+
+Unfortunately, in case of the ARM arhictectures it does not work, so one has to build both the ROS package from source:
+
+```sh
+THIS PART HAS TO BE UPDATED...
 ```
 
 Moreover, the [Python wrapper](https://pypi.org/project/pyrealsense2/) for the Intel RealSense SDK2.0 is also needed, which provides C++ to Python binding (maybe at some point I am going to use C++ instead of Python)
