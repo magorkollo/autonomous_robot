@@ -3,25 +3,23 @@ import numpy as np
 
 class DepthCamera:
     def __init__(self):
-        # Configure depth and color streams
         self.pipeline = rs.pipeline()
         config = rs.config()
 
-        # Get device product line for setting a supporting resolution
+        # pipeline and product line information to get resolution support
         pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
         self.pipeline_profile = config.resolve(pipeline_wrapper)
         device = self.pipeline_profile.get_device()
         device_product_line = str(device.get_info(rs.camera_info.product_line))
 
-        #point cloud initialization
-        self.pc = rs.pointcloud()
+        # point cloud initialization
+        self.pointcloud = rs.pointcloud()
         align_to = rs.stream.color
         self.align = rs.align(align_to)
 
+        # configuring the camera stream
         config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
         config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
-
-
 
         # Start streaming
         self.pipeline.start(config)
@@ -33,9 +31,8 @@ class DepthCamera:
         depth_frame_distance = frames.get_depth_frame().as_depth_frame()
 
         # get depth information 
-        self.pc.map_to(depth_frame)
-        points = self.pc.calculate(depth_frame)
-        # not sure about this
+        self.pointcloud.map_to(depth_frame)
+        points = self.pointcloud.calculate(depth_frame)
 
         depth_image = np.asanyarray(depth_frame.get_data())
         depth = depth_image.astype(float)
