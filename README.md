@@ -1,12 +1,11 @@
-# Simple autonomous robot for License Thesis
-
+# AI Robotics pwd by Turtlebot3 + nVidia Jetson + OpenManipulator
+ 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-Autonomous robots are starting to gain higher and higher influence in agriculture ...
+Autonomous robots, computer vision and AI controlled applications are starting to have higher and higher influence in our everyday life. It is the same case for precision agriculture, where the help of these robots could conduct a more efficient but also greener way of food production. 
 
-Your README file is normally the first entry point to your code. It should tell people why they should use your module, how they can install it, and how they can use it. Standardizing how you write your README makes creating and maintaining your READMEs easier. Great documentation takes work!
+This project is supposed is supposed to be my Bachelor's License (BSc) project in Computer Science & Automation at the Technical University of Cluj-Napoca, where I intend to ... 
 
-This repository contains:
 
 1. [The specification](spec.md) for how a standard README should look.
 2. A link to [a linter](https://github.com/RichardLitt/standard-readme-preset) you can use to keep your README maintained ([work in progress](https://github.com/RichardLitt/standard-readme/issues/5)).
