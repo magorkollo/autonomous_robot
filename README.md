@@ -84,8 +84,30 @@ THIS PART HAS TO BE UPDATED...
 Moreover, the [Python wrapper](https://pypi.org/project/pyrealsense2/) for the Intel RealSense SDK2.0 is also needed, which provides C++ to Python binding (maybe at some point I am going to use C++ instead of Python)
 
 ```sh
-$ sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
+$ pip install pyrealsense2
 ```
+
+In case of the SDK's Python wrapper the situation is the same (if it has not been resolved in the meantime) it does not work with the ARM processors, therefore we need to build it from source:
+
+```sh
+$ git clone https://github.com/IntelRealSense/librealsense.git
+$ cd librealsense
+$ mkdir build
+$ cd build
+$ cmake ../ -DBUILD_PYTHON_BINDINGS:bool=true -DBUILD_WITH_CUDA:bool=true
+$ make -j4
+$ sudo make install
+
+$ cd ~/librealsense
+$ ./scripts/setup_udev_rules.sh
+
+export PATH=$PATH:~/.local/bin
+export PYTHONPATH=$PYTHONPATH:/usr/local/lib
+export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.6/pyrealsense2
+```
+
+
+
 
 
 
