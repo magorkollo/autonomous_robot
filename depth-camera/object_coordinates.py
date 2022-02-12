@@ -1,5 +1,5 @@
 import cv2
-import pyrealsense2.pyrealsense2 as rs
+import pyrealsense2.pyrealsense2 as rs # in case if you build from source
 # import pyrealsense2 as rs
 from depth_camera_control import *
 import numpy as np
@@ -9,7 +9,6 @@ import jetson.inference
 import jetson.utils
 
 net = jetson.inference.detectNet("ssd-mobilenet-v2", threshold=0.5)
-#camera = jetson.utils.videoSource("/dev/video0")      # '/dev/video0' for V4L2
 display = jetson.utils.videoOutput("display://0") # 'my_video.mp4' for file
 
 # random initialization of the point we are looking for
@@ -45,12 +44,9 @@ intrinsics.coeffs = [i for i in camera_info.D]
 cv2.namedWindow("Color frame")
 cv2.setMouseCallback("Color frame", show_distance)
 
-
 def listener():
     rospy.init_node('listener', anonymous = True)
     rospy.Subscriber("/camera/depth/camera_info", CameraInfo, listen_to_camera)
-    
-
     rospy.spin()
 
 while True:
@@ -72,13 +68,22 @@ while True:
     height = bgr_img.height, format="rgb8")
     jetson.utils.cudaConvertColor(bgr_img, rgb_img)
     detections = net.Detect(rgb_img)
+
+    for obj_det in detections:
+        if detection.ClassID != 55:
+            continue
+        print("Rectangle around the detected object")
+        cv2.rectangle(color_frame, (int(obj_det.Left), int(obj_det.Top),
+        int(obj_det.Right), int(obj_det.Bottom)), (0,255,0), 2)
+        cv2.circle(color_frame, (int(obj_det.Center[0]), int(obj_det.Center[1])),
+        3, (0, 255, 0), -1)
+    
     display.Render(rgb_img)
     display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
 
 #   detections = net.Detect(img)
 #	display.Render(img)
 #	display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
-
 
     cv2.putText(color_frame, "distance mm: {0:.3f}".format(x), (point[0], point[1] - 20), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
     cv2.putText(color_frame, "y: {0:.3f}".format(y), (point[0], point[1] - 45), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
