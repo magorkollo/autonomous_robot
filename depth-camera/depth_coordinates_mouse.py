@@ -1,5 +1,6 @@
 import cv2
-import pyrealsense2 as rs
+import pyrealsense2.pyrealsense2 as rs
+# import pyrealsense2 as rs
 from depth_camera_control import *
 import numpy as np
 import pickle
