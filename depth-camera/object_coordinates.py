@@ -67,9 +67,12 @@ while True:
     print("y = ", y)
     print("z = ", z)
 
-    img = color_frame
-    detections = net.Detect(img)
-    display.Render(img)
+    brg_img = jetson.utils.cudaFromNumpy(color_frame, isBGR=True)
+    rgb_img = jetson.utils.cudaAllocMapped(width=bgr.img.width, 
+    height = bgr_img.height, format="rgb8")
+    jetson.utils.cudaConvertColor(bgr_img, rgb_img)
+    detections = net.Detect(rgb_img)
+    display.Render(rgb_img)
     display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
 
 #   detections = net.Detect(img)
