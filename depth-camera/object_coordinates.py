@@ -5,6 +5,13 @@ from depth_camera_control import *
 import numpy as np
 import pickle
 
+import jetson.inference
+import jetson.utils
+
+net = jetson.inference.detectNet("ssd-mobilenet-v2", threshold=0.5)
+#camera = jetson.utils.videoSource("/dev/video0")      # '/dev/video0' for V4L2
+display = jetson.utils.videoOutput("display://0") # 'my_video.mp4' for file
+
 # random initialization of the point we are looking for
 point = (1, 1)
 
@@ -59,6 +66,11 @@ while True:
     print("x = ", x)
     print("y = ", y)
     print("z = ", z)
+
+    img = color_frame
+	detections = net.Detect(img)
+	display.Render(img)
+	display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
 
 
     cv2.putText(color_frame, "distance mm: {0:.3f}".format(x), (point[0], point[1] - 20), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
