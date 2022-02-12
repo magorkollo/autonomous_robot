@@ -67,8 +67,8 @@ while True:
     print("y = ", y)
     print("z = ", z)
 
-    brg_img = jetson.utils.cudaFromNumpy(color_frame, isBGR=True)
-    rgb_img = jetson.utils.cudaAllocMapped(width=bgr.img.width, 
+    bgr_img = jetson.utils.cudaFromNumpy(color_frame, isBGR=True)
+    rgb_img = jetson.utils.cudaAllocMapped(width = bgr_img.width, 
     height = bgr_img.height, format="rgb8")
     jetson.utils.cudaConvertColor(bgr_img, rgb_img)
     detections = net.Detect(rgb_img)
