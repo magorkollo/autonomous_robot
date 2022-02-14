@@ -68,7 +68,7 @@ while True:
     for object_detected in detections:
         if object_detected.ClassID != 55:
             continue
-        global point = (object_detected.Center[0], object_detected.Center[1])
+        point = (object_detected.Center[0], object_detected.Center[1])
         distance = depth_frame_distance.get_distance(point[0], point[1])
         result = rs.rs2_deproject_pixel_to_point(intrinsics, [point[0], point[1]], distance)
         x = result[2]
