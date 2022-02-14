@@ -108,9 +108,6 @@ export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.6/pyrealsense2
 
 
 
-
-
-
 ## Usage
 
 This is only a documentation package. You can print out [spec.md](spec.md) to your console:
@@ -147,7 +144,7 @@ To see how the specification has been applied, see the [example-readmes](example
 
 ## Maintainers
 
-[@RichardLitt](https://github.com/RichardLitt).
+
 
 ## Contributing
 
@@ -157,8 +154,6 @@ Standard Readme follows the [Contributor Covenant](http://contributor-covenant.o
 
 ### Contributors
 
-This project exists thanks to all the people who contribute. 
-<a href="https://github.com/RichardLitt/standard-readme/graphs/contributors"><img src="https://opencollective.com/standard-readme/contributors.svg?width=890&button=false" /></a>
 
 
 ## License
