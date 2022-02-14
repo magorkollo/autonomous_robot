@@ -66,8 +66,8 @@ while True:
     display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
 
     for object_detected in detections:
-        if object_detected.ClassID in IDs:
-            continue
+        # if object_detected.ClassID in IDs:
+        #     continue
         point = (int(object_detected.Center[0]), int(object_detected.Center[1]))
         print(point)
         cv2.circle(color_frame, point, 4, (255, 255, 0))
