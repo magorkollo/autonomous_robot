@@ -66,7 +66,7 @@ while True:
     display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
 
     for object_detected in detections:
-        if object_detected.ClassID is in IDs:
+        if object_detected.ClassID in IDs:
             continue
         point = (int(object_detected.Center[0]), int(object_detected.Center[1]))
         print(point)
