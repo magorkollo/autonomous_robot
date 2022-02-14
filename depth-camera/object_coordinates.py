@@ -55,7 +55,6 @@ while True:
     ret, depth, color_frame, points, depth_frame_distance = dc.get_frame()
 
     # Show distance for a specific point
-    cv2.circle(color_frame, point, 4, (0, 0, 255))
 
     bgr_img = jetson.utils.cudaFromNumpy(color_frame, isBGR=True)
     rgb_img = jetson.utils.cudaAllocMapped(width = bgr_img.width, 
@@ -68,8 +67,9 @@ while True:
     for object_detected in detections:
         if object_detected.ClassID != 55:
             continue
-        point = (object_detected.Center[0], object_detected.Center[1])
+        point = (int(object_detected.Center[0]), int(object_detected.Center[1]))
         print(point)
+        cv2.circle(color_frame, point, 4, (0, 0, 255))
         # distance = depth_frame_distance.get_distance(point[0], point[1])
         # result = rs.rs2_deproject_pixel_to_point(intrinsics, [point[0], point[1]], distance)
         # x = result[2]
