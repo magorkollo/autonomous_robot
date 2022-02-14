@@ -62,8 +62,8 @@ while True:
     height = bgr_img.height, format="rgb8")
     jetson.utils.cudaConvertColor(bgr_img, rgb_img)
     detections = net.Detect(rgb_img)
-    # display.Render(rgb_img)
-    # display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
+    display.Render(rgb_img)
+    display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
 
     for object_detected in detections:
         if object_detected.ClassID != 55:
@@ -81,7 +81,7 @@ while True:
         cv2.putText(color_frame, "y: {0:.3f}".format(y), (point[0], point[1] - 45), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
         cv2.putText(color_frame, "z: {0:.3f}".format(z), (point[0], point[1] - 70), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
         
-        
+
     cv2.imshow("Color frame", color_frame)
     key = cv2.waitKey(1)
     if key == 27:
