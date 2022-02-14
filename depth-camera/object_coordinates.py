@@ -74,12 +74,10 @@ while True:
     detections = net.Detect(rgb_img)
     display.Render(rgb_img)
     display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
-
-#   detections = net.Detect(img)
-#	display.Render(img)
-#	display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
-
-
+	#print("edd meg a faszom")
+    for object_detected in detections:
+	    if object_detected.ClassID != 55:
+            print("fasz")
     cv2.putText(color_frame, "distance mm: {0:.3f}".format(x), (point[0], point[1] - 20), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
     cv2.putText(color_frame, "y: {0:.3f}".format(y), (point[0], point[1] - 45), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
     cv2.putText(color_frame, "z: {0:.3f}".format(z), (point[0], point[1] - 70), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
