@@ -14,6 +14,7 @@ display = jetson.utils.videoOutput("display://0") # 'my_video.mp4' for file
 
 # random initialization of the point we are looking for
 point = (1, 1)
+IDs = (53, 55)
 
 def show_distance(event, x, y, args, params):
     global point
@@ -65,11 +66,11 @@ while True:
     display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
 
     for object_detected in detections:
-        if object_detected.ClassID != 55:
+        if object_detected.ClassID is in IDs:
             continue
         point = (int(object_detected.Center[0]), int(object_detected.Center[1]))
         print(point)
-        cv2.circle(color_frame, point, 4, (0, 0, 255))
+        cv2.circle(color_frame, point, 4, (255, 255, 0))
         # distance = depth_frame_distance.get_distance(point[0], point[1])
         # result = rs.rs2_deproject_pixel_to_point(intrinsics, [point[0], point[1]], distance)
         # x = result[2]
