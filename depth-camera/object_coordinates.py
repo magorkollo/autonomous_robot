@@ -43,14 +43,12 @@ intrinsics.coeffs = [i for i in camera_info.D]
 
 # create mouse event
 cv2.namedWindow("Color frame")
-cv2.setMouseCallback("Color frame", show_distance)
+#cv2.setMouseCallback("Color frame", show_distance)
 
 
 def listener():
     rospy.init_node('listener', anonymous = True)
     rospy.Subscriber("/camera/depth/camera_info", CameraInfo, listen_to_camera)
-    
-
     rospy.spin()
 
 while True:
@@ -58,32 +56,32 @@ while True:
 
     # Show distance for a specific point
     cv2.circle(color_frame, point, 4, (0, 0, 255))
-    distance = depth_frame_distance.get_distance(point[0], point[1])
-    result = rs.rs2_deproject_pixel_to_point(intrinsics, [point[0], point[1]], distance)
-    x = result[2]
-    y = result[0]
-    z = result[1]
-    print("x = ", x)
-    print("y = ", y)
-    print("z = ", z)
 
     bgr_img = jetson.utils.cudaFromNumpy(color_frame, isBGR=True)
     rgb_img = jetson.utils.cudaAllocMapped(width = bgr_img.width, 
     height = bgr_img.height, format="rgb8")
     jetson.utils.cudaConvertColor(bgr_img, rgb_img)
     detections = net.Detect(rgb_img)
-    display.Render(rgb_img)
-    display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
+    # display.Render(rgb_img)
+    # display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
 
-#   detections = net.Detect(img)
-#	display.Render(img)
-#	display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
-
-
-    cv2.putText(color_frame, "distance mm: {0:.3f}".format(x), (point[0], point[1] - 20), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
-    cv2.putText(color_frame, "y: {0:.3f}".format(y), (point[0], point[1] - 45), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
-    cv2.putText(color_frame, "z: {0:.3f}".format(z), (point[0], point[1] - 70), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
-
+    for object_detected in detections:
+        if object_detected.ClassID != 55:
+            continue
+        global point = (object_detected.Center[0], object_detected.Center[1])
+        distance = depth_frame_distance.get_distance(point[0], point[1])
+        result = rs.rs2_deproject_pixel_to_point(intrinsics, [point[0], point[1]], distance)
+        x = result[2]
+        y = result[0]
+        z = result[1]
+        print("x = ", x)
+        print("y = ", y)
+        print("z = ", z)
+        cv2.putText(color_frame, "distance mm: {0:.3f}".format(x), (point[0], point[1] - 20), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
+        cv2.putText(color_frame, "y: {0:.3f}".format(y), (point[0], point[1] - 45), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
+        cv2.putText(color_frame, "z: {0:.3f}".format(z), (point[0], point[1] - 70), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
+        
+        
     cv2.imshow("Color frame", color_frame)
     key = cv2.waitKey(1)
     if key == 27:
