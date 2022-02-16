@@ -115,9 +115,36 @@ export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.6/pyrealsense2
 
 ### ...
 
-### ROS Master - Slave connection 
+### ROS Master-Slave with Jetson Nano
 
+In case of the Turtlebot the most common method to control your robot is to use a master-slave configuration. The ROS Master helps individual nodes to communicate with each other peer-to-peer, therefore it is also used for the communication of multiple robots. In case of the Jetson Nano, it does not have RTC backup power supply the clock will be reseted after powering off. If it does not have an ethernet/internet connection it won't know the current date and time, but in many cases even having the internet connection it just simply did not synchronize with current time. On the other hand, the remote PC and the Jetson have to be synchronized somehow, otherwise there could be problems in the communication (at least in case of the OpenManipulator controller). There could be multiple solutions, like [this](https://github.com/justsoft/jetson-nano-date-sync) but I have used [chrony](https://chrony.tuxfamily.org/)
 
+On our **remote PC**:
+
+```sh
+sudo apt-get install chrony
+sudo nano /etc/chrony/chrony.conf
+```
+
+At the end of your chrony.conf file put the following, be aware of using the correct IP:
+```sh
+# make it serve time even if it is not synced (as it can't reach out)
+local stratum 8
+# allow the IP of your peer to connect
+allow <IP of your time-clinet>
+```
+
+On our **Jetson Nano** the steps are similar:
+```sh
+sudo apt-get install chrony
+sudo nano /etc/chrony/chrony.conf
+```
+Then we have to add the following line:
+```sh
+server <server_ip> minpoll 0 maxpoll 5 maxdelay .05
+```
+
+And it should work in the following. Source: I found this provided by lorenznew [here](https://answers.ros.org/question/298821/tf-timeout-with-multiple-machines/?answer=298908#post-id-298908)
 
 ## Usage
 
@@ -169,4 +196,4 @@ Standard Readme follows the [Contributor Covenant](http://contributor-covenant.o
 
 ## License
 
-[MIT](LICENSE) © Köllő Magor Örs, TUCN, 2022.
+[MIT](https://en.wikipedia.org/wiki/MIT_License) © Köllő Magor Örs, TUCN, 2022.
