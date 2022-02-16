@@ -97,14 +97,25 @@ $ cd build
 $ cmake ../ -DBUILD_PYTHON_BINDINGS:bool=true -DBUILD_WITH_CUDA:bool=true
 $ make -j4
 $ sudo make install
-
+```
+After building the Python wrapeer for the Realsense SDK2.0 from source we need to update the ... 
+```sh
 $ cd ~/librealsense
 $ ./scripts/setup_udev_rules.sh
+```
 
+Next, we need to add the following lines to .bashrc file:
+
+```sh
+sudo nano ~/.bashrc
 export PATH=$PATH:~/.local/bin
 export PYTHONPATH=$PYTHONPATH:/usr/local/lib
 export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.6/pyrealsense2
 ```
+
+### ...
+
+### ROS Master - Slave connection 
 
 
 
