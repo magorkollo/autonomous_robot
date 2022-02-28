@@ -89,21 +89,21 @@ class OpenManipulatorX(object):
 
     print("INFORMATION ABOUT THE ARM: ")
     planning_frame = move_group_arm.get_planning_frame()
-    print("============ Planning frame: %s" % planning_frame)
+    print("Planning frame: %s" % planning_frame)
 
     eef_link = move_group_arm.get_end_effector_link()
-    print("============ End effector link: %s" % eef_link)
+    print("End effector link: %s" % eef_link)
 
     planning_frame_gripper = move_group_gripper.get_planning_frame()
-    print("============ GRIPPER FRAME: %s" % planning_frame_gripper)
+    print("GRIPPER FRAME: %s" % planning_frame_gripper)
 
     eef_link_gripper = move_group_gripper.get_end_effector_link()
-    print("============ End effector link GRIPPER: %s" % eef_link_gripper)
+    print("End effector link GRIPPER: %s" % eef_link_gripper)
 
     group_names = arm.get_group_names()
-    print("============ Available Planning Groups:", arm.get_group_names())
+    print("Available Planning Groups:", arm.get_group_names())
 
-    print("============ Printing arm state")
+    print("Printing arm state")
     print arm.get_current_state()
 
     self.box_name = ''
@@ -241,33 +241,33 @@ def main():
   try:
     open_manipulator_x = OpenManipulatorX()
 
-    print "============ Press `Enter` to execute a movement using a joint state goal ..."
+    print "Press `Enter` to execute a movement using a joint state goal ..."
     raw_input()
     coords = [0.075, -0.2, 0.195]
     angles = open_manipulator_x.inverse_kinematics(coords)
     open_manipulator_x.go_to_joint_state(angles)
 
-    print "============ Press `Enter` to execute a movement using a joint state goal ..."
+    print "Press `Enter` to execute a movement using a joint state goal ..."
     raw_input()
     open_manipulator_x.gripper_open()
 
-    print "============ Press `Enter` to execute a movement using a joint state goal ..."
+    print "Press `Enter` to execute a movement using a joint state goal ..."
     raw_input()
     open_manipulator_x.gripper_close()
 
-    print "============ Press `Enter` to execute a movement using a joint state goal ..."
+    print "Press `Enter` to execute a movement using a joint state goal ..."
     raw_input()
     open_percentage = 100 # give a percentage you would like the gripper to be opened
     open_manipulator_x.gripper_precision(open_percentage)
 
-    print "============ Press `Enter` to execute a movement using a joint state goal ..."
+    print "Press `Enter` to execute a movement using a joint state goal ..."
     raw_input()
     angles = [pi/2 ,0 ,0 ,0]
     open_manipulator_x.go_to_joint_state(angles)
 
 
 
-    print "============ Python open_manipulator_x demo complete!"
+    print "Python open_manipulator_x demo complete!"
   except rospy.ROSInterruptException:
     return
   except KeyboardInterrupt:
