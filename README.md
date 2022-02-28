@@ -148,12 +148,37 @@ And it should work in the following. Source: I found this provided by lorenznew 
 
 ## Usage
 
-This is only a documentation package. You can print out [spec.md](spec.md) to your console:
+There are going to be shown multiple use-cases here, in which the arm could be used. Now, just a short description about how to launch the robot and use together with the arm. 
+
+First on our **Remote PC** we should start running the roscore
 
 ```sh
-$ standard-readme-spec
-# Prints out the standard-readme spec
+roscore
 ```
+
+Next in a new terminal window, we should connect to our **Jetson Nano, to bring up the Waffle** using:
+
+```sh
+ssh name_of_jetson@wlan_ip_of_jetson
+roslaunch turtlebot3_bringup turtlebot3_robot.launch
+```
+
+For instance, for controlling the robotic arm, in the next phase we should make a connection **(bringup) the arm on our Remote PC**, by running the following command in a new terminal window:
+
+```sh
+roslaunch turtlebot3_manipulation_bringup turtlebot3_manipulation_bringup.launch
+``` 
+Note: here I've made some changes to be able to control the arm using ROS Melodic.
+
+In the following step, I am using [MoveIt!](http://docs.ros.org/en/melodic/api/moveit_tutorials/html/index.html) to control the arm. For this, you can get ..., and we can launch the rviz and controller using:
+
+```sh
+roslaunch open_manipulator_controllers joint_trajectory_controller.launch sim:=false
+```
+
+
+
+
 
 ### Generator
 
