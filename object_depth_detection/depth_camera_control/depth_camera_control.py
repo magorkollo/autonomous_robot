@@ -1,17 +1,33 @@
 import pyrealsense2.pyrealsense2 as rs
 # import pyrealsense2 as rs
 import numpy as np
+import pickle
 
 class DepthCamera:
     def __init__(self):
         self.pipeline = rs.pipeline()
         config = rs.config()
+        with open('camera_file.txt', 'rb') as camera_file:
+            global camera_info
+            camera_info = pickle.load(camera_file)
+        
+        self.intrinsics = rs.intrinsics()
+        self.intrinsics.width = camera_info.width
+        self.intrinsics.height = camera_info.height
+        self.intrinsics.ppx = camera_info.K[2]
+        self.intrinsics.ppy = camera_info.K[5]
+        self.intrinsics.fx = camera_info.K[0]
+        self.intrinsics.fy = camera_info.K[4]
+        self.intrinsics.model = rs.distortion.none
+        self.intrinsics.coeffs = [i for i in camera_info.D]
+
 
         # pipeline and product line information to get resolution support
         pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
         self.pipeline_profile = config.resolve(pipeline_wrapper)
         device = self.pipeline_profile.get_device()
         device_product_line = str(device.get_info(rs.camera_info.product_line))
+        self.depth_scale = self.pipeline_profile.get_device().first_depth_sensor().get_depth_scale()
 
         # point cloud initialization
         self.pointcloud = rs.pointcloud()
@@ -42,8 +58,21 @@ class DepthCamera:
             return False, None, None, None
         return True, depth, color_image, points, depth_frame_distance
 
+    def get_distance(self, p0, p1):
+        ret, depth, color_frame, points, depth_frame_distance = self.get_frame()
+        distance = depth_frame_distance.get_distance(p0, p1)
+        return distance
+
+    def get_depth_coordinates(self, p0, p1):
+        distance = self.get_distance(p0, p1)
+        depth_coordinates =  rs.rs2_deproject_pixel_to_point(self.intrinsics, [p0, p1], distance)
+        return depth_coordinates
+
     def release(self):
         self.pipeline.stop()
 
     def get_profile(self):
         return self.pipeline_profile
+    
+    def get_intrinsics(self):
+        return self.intrinsics
