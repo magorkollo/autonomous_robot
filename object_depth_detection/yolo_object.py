@@ -3,6 +3,8 @@ import numpy as np
 import argparse
 import time
 from depth_camera_control import *
+import math
+
 
 class YoloNet:
     def __init__(self):
@@ -39,25 +41,54 @@ class YoloNet:
         confs = []
         class_ids = []
         centers = []
+        lefts = []
+        rights = []
         for result in results:
             for detect in result:
                 scores = detect[5:]
                 class_id = np.argmax(scores)
-                conf = scores[class_id]
-                if conf > 0.25:
-                    center_x = int(detect[0] * width)
-                    center_y = int(detect[1] * height)
-                    center = [center_x, center_y]
-                    w = int(detect[2] * width)
-                    h = int(detect[3] * height)
-                    x = int(center_x - w/2)
-                    y = int(center_y - h / 2)
-                    boxes.append([x, y, w, h])
-                    centers.append([center_x, center_y])
-                    confs.append(float(conf))
-                    class_ids.append(class_id)
-        return boxes, confs, class_ids, centers
+                if class_id == 49:
+                    conf = scores[class_id]
+                    if conf > 0.25:
+                        center_x = int(detect[0] * width)
+                        center_y = int(detect[1] * height)
+                        w = int(detect[2] * width)
+                        h = int(detect[3] * height)
+                        x = int(center_x - w/2)
+                        y = int(center_y - h / 2)
+                        boxes.append([x, y, w, h])
+                        centers.append([center_x, center_y])
+                        lefts.append([int(x), int(y+h/2)])
+                        rights.append([int(x+w), int(y+h/2)])
+                        confs.append(float(conf))
+                        class_ids.append(class_id)
+        return boxes, confs, class_ids, centers, lefts, rights
     
+    def calculate_2d_distance(self, point0, point1):
+        sum_x = point0[0] - point1[0]
+        sum_y = point0[1] - point1[1]
+        distance_2d = math.sqrt(pow(sum_x, 2) + pow(sum_y,2))
+        return distance_2d
+
+    def calculate_depth(self, centers, lefts, rights):
+        distance_2d = 0
+        for i in range(len(centers)):
+            center = centers[i]
+            left = lefts[i]
+            right = rights[i]
+            depth_coord_center = dc.get_depth_coordinates(center[0], center[1])
+            depth_coord_left = dc.get_depth_coordinates(left[0], left[1])
+            depth_coord_right = dc.get_depth_coordinates(right[0], right[1])
+            left_deep = [depth_coord_left[0], depth_coord_left[1]]
+            right_deep = [depth_coord_right[0], depth_coord_right[1]]
+            distance_2d = calculate_2d_distance(left_deep, right_deep)
+            depth_center.append(depth_coord_center)
+            depth_right.append(depth_coord_right)
+            depth_left.append(depth_coord_left)
+        return distance_2d
+
+
+
     def draw_labels(self, boxes, confs, class_ids, centers, img): 
         indexes = cv2.dnn.NMSBoxes(boxes, confs, 0.5, 0.4)
         font = cv2.FONT_HERSHEY_PLAIN
@@ -71,8 +102,8 @@ class YoloNet:
                 cv2.circle(img, center, 4, (0, 0, 255))
                 cv2.putText(img, label, (x, y - 5), font, 1, color, 1)
         cv2.imshow("Image", img)
-
-    def draw_labels_depth(self, boxes, confs, class_ids, centers, img): 
+    
+    def draw_labels_depth(self, boxes, confs, class_ids, centers, lefts, rights, img): 
         indexes = cv2.dnn.NMSBoxes(boxes, confs, 0.5, 0.4)
         font = cv2.FONT_HERSHEY_PLAIN
         for i in range(len(boxes)):
@@ -81,15 +112,26 @@ class YoloNet:
                 label = str(self.classes[class_ids[i]])
                 color = self.colors[i]
                 center = centers[i]
-                depth_coords = dc.get_depth_coordinates(center[0], center[1])
-                print("x = ", depth_coords[2])
-                print("y = ", depth_coords[0])
-                print("z = ", depth_coords[1])
-                cv2.putText(img, "dpth: {0:.3f}".format(depth_coords[2]), (center[0], center[1] - 20), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
-                cv2.putText(img, "y: {0:.3f}".format(depth_coords[0]), (center[0], center[1] - 45), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
-                cv2.putText(img, "z: {0:.3f}".format(depth_coords[1]), (center[0], center[1] - 70), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
+                left = lefts[i]
+                right = rights[i]
+                depth_coords_center = dc.get_depth_coordinates(center[0], center[1])
+                depth_coord_left = dc.get_depth_coordinates(left[0], left[1])
+                depth_coord_right = dc.get_depth_coordinates(right[0], right[1])
+                print("xCenter = ", depth_coords_center[2])
+                print("xLeft = ", depth_coord_left[2])
+                print("xRight = ", depth_coord_right[2])
+                left_deep = [depth_coord_left[0], depth_coord_left[1]]
+                right_deep = [depth_coord_right[0], depth_coord_right[1]]
+                distance_2d = self.calculate_2d_distance(left_deep, right_deep)
+                cv2.putText(img, "dpth: {0:.3f}".format(depth_coords_center[2]), (center[0], center[1] - 25), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
+                cv2.putText(img, "y: {0:.3f}".format(depth_coords_center[0]), (center[0], center[1] - 35), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
+                cv2.putText(img, "z: {0:.3f}".format(depth_coords_center[1]), (center[0], center[1] - 45), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
                 cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
-                cv2.circle(img, center, 4, (0, 0, 255))
+                cv2.circle(img, center, 4, (255, 255, 255))
+                cv2.circle(img, left, 4, (255, 0, 255))
+                cv2.circle(img, right, 4, (120, 120, 0))
+                cv2.line(img, left, right, (120, 120, 0), 2)
+                cv2.putText(img, "dist: {0:.3f}".format(distance_2d), (left[0], left[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1.2, (255, 255, 255), 2)
                 cv2.putText(img, label, (x, y - 5), font, 1, color, 1)
         cv2.imshow("Hehe", img)
 
@@ -118,6 +160,7 @@ class YoloNet:
                 break
         cap.release()
 
+
     def depth_detect(self, dc):
         #model, classes, colors, output_layers = load_yolo()
         while True:
@@ -125,8 +168,8 @@ class YoloNet:
             frame = color_frame
             height, width, channels = frame.shape
             blob, outputs = self.detect_objects(frame)
-            boxes, confs, class_ids, centers = self.get_box_dimensions(outputs, height, width)
-            self.draw_labels_depth(boxes, confs, class_ids, centers, frame)
+            boxes, confs, class_ids, centers, lefts, rights = self.get_box_dimensions(outputs, height, width)
+            self.draw_labels_depth(boxes, confs, class_ids, centers, lefts, rights, frame)
             key = cv2.waitKey(1)
             if key == 27:
                 break
