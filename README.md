@@ -176,7 +176,7 @@ In the following step, I am using [MoveIt!](http://docs.ros.org/en/melodic/api/m
 roslaunch open_manipulator_controllers joint_trajectory_controller.launch sim:=false
 ```
 
-
+https://answers.ros.org/question/196586/how-do-i-disable-execution_duration_monitoring/
 
 
 
