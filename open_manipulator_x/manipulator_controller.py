@@ -180,6 +180,30 @@ class OpenManipulatorX(object):
     # Publish
     self.display_trajectory_publisher.publish(display_trajectory)
 
+  def get_joint_angles(self):
+    return self.move_group_arm.get_current_joint_values()
+
+  def forward_kinematics(self, joint_angles):
+      '''
+      Calculates the TCP coordinates from the joint angles
+      :param joint_angles: list, joint angles [j0, j1, j2, j3]
+      :return: list, the list of TCP coordinates
+      '''
+      # link lengths
+      l1 = 0.128
+      l2 = 0.024
+      l3 = 0.124
+      l4 = 0.126
+
+      # offsets
+      x_offset = 0.012
+      z_offset = 0.0595 + 0.017
+
+      x = x_offset + (l1 * math.sin(joint_angles[1]) + l2 * math.cos(joint_angles[1]) + l3 * math.cos(joint_angles[1] + joint_angles[2]) + l4 * math.cos(joint_angles[1] + joint_angles[2] + joint_angles[3])) * math.cos(joint_angles[0])
+      y = (l1 * math.sin(joint_angles[1]) + l2 * math.cos(joint_angles[1]) + l3 * math.cos(joint_angles[1] + joint_angles[2]) + l4 * math.cos(joint_angles[1] + joint_angles[2] + joint_angles[3])) * math.sin(joint_angles[0])
+      z = z_offset + l1 * math.cos(joint_angles[1]) - l2 * math.sin(joint_angles[1]) - l3 * math.sin(joint_angles[1] + joint_angles[2]) - l4 * math.sin(joint_angles[1] + joint_angles[2] + joint_angles[3])
+
+      return [x,y,z]
 
   def inverse_kinematics(self, coords, gripper_angle = 0):
     '''

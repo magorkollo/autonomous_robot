@@ -58,16 +58,19 @@ class YoloNet:
                         y = int(center_y - h / 2)
                         boxes.append([x, y, w, h])
                         centers.append([center_x, center_y])
-                        lefts.append([int(x), int(y+h/2)])
-                        rights.append([int(x+w), int(y+h/2)])
+                        lefts.append([int(x+10), int(y+h/2)])
+                        rights.append([int(x+w-10), int(y+h/2)])
                         confs.append(float(conf))
                         class_ids.append(class_id)
         return boxes, confs, class_ids, centers, lefts, rights
     
     def calculate_2d_distance(self, point0, point1):
-        sum_x = point0[0] - point1[0]
-        sum_y = point0[1] - point1[1]
-        distance_2d = math.sqrt(pow(sum_x, 2) + pow(sum_y,2))
+        sum_y = point0[0] - point1[0]
+        sum_z = point0[1] - point1[1]
+        # distance_2d = math.sqrt(pow(sum_y, 2) + pow(sum_z,2))
+        distance_2d = math.sqrt(abs(pow(sum_y,2) - pow(sum_z,2)))
+        # print("value 0 ---y: ", abs(sum_y))
+        # print("value 0 ---z: ", abs(sum_z))
         return distance_2d
 
     def calculate_depth(self, centers, lefts, rights):
@@ -82,6 +85,7 @@ class YoloNet:
             left_deep = [depth_coord_left[0], depth_coord_left[1]]
             right_deep = [depth_coord_right[0], depth_coord_right[1]]
             distance_2d = calculate_2d_distance(left_deep, right_deep)
+            # print("depth distance: ", depth_coord_left[2] - depth_coord_right[2])
             depth_center.append(depth_coord_center)
             depth_right.append(depth_coord_right)
             depth_left.append(depth_coord_left)
@@ -117,15 +121,15 @@ class YoloNet:
                 depth_coords_center = dc.get_depth_coordinates(center[0], center[1])
                 depth_coord_left = dc.get_depth_coordinates(left[0], left[1])
                 depth_coord_right = dc.get_depth_coordinates(right[0], right[1])
-                print("xCenter = ", depth_coords_center[2])
-                print("xLeft = ", depth_coord_left[2])
-                print("xRight = ", depth_coord_right[2])
+                print("dpth = ", depth_coords_center[2])
+                print("x = ", depth_coords_center[0])
+                print("y = ", depth_coords_center[1])
                 left_deep = [depth_coord_left[0], depth_coord_left[1]]
                 right_deep = [depth_coord_right[0], depth_coord_right[1]]
                 distance_2d = self.calculate_2d_distance(left_deep, right_deep)
-                cv2.putText(img, "dpth: {0:.3f}".format(depth_coords_center[2]), (center[0], center[1] - 25), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
-                cv2.putText(img, "y: {0:.3f}".format(depth_coords_center[0]), (center[0], center[1] - 35), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
-                cv2.putText(img, "z: {0:.3f}".format(depth_coords_center[1]), (center[0], center[1] - 45), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
+                cv2.putText(img, "dpth: {0:.3f}".format(depth_coords_center[2]), (center[0], center[1] - 65), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
+                cv2.putText(img, "x: {0:.3f}".format(depth_coords_center[0]), (center[0], center[1] - 75), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
+                cv2.putText(img, "y: {0:.3f}".format(depth_coords_center[1]), (center[0], center[1] - 85), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
                 cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
                 cv2.circle(img, center, 4, (255, 255, 255))
                 cv2.circle(img, left, 4, (255, 0, 255))
@@ -169,7 +173,7 @@ class YoloNet:
             height, width, channels = frame.shape
             blob, outputs = self.detect_objects(frame)
             boxes, confs, class_ids, centers, lefts, rights = self.get_box_dimensions(outputs, height, width)
-            self.draw_labels_depth(boxes, confs, class_ids, centers, lefts, rights, frame)
+            self.draw_labels_depth(boxes, confs, class_ids, lefts, lefts, rights, frame)
             key = cv2.waitKey(1)
             if key == 27:
                 break
