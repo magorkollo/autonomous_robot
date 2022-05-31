@@ -1,4 +1,6 @@
-# AI Robotics pwd by Turtlebot3 + nVidia Jetson + OpenManipulator
+# Autonomous Harvesting Robot Prototype
+
+## AI Robotics pwd by Turtlebot3 + nVidia Jetson + OpenManipulator
  
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
