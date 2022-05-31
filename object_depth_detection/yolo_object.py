@@ -47,7 +47,7 @@ class YoloNet:
             for detect in result:
                 scores = detect[5:]
                 class_id = np.argmax(scores)
-                if class_id == 49:
+                if class_id == 47:
                     conf = scores[class_id]
                     if conf > 0.25:
                         center_x = int(detect[0] * width)
