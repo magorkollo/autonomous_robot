@@ -1,0 +1,4 @@
+object_depth_detection/yolo_dependencies/*
+/object_depth_detection/yolo_dependencies/*
+__pycache__/
+
