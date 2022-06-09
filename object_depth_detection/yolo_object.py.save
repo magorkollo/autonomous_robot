@@ -8,11 +8,8 @@ import math
 
 class YoloNet:
     def __init__(self):
-        self.net = cv2.dnn.readNet("/home/jnano/autonomous_robot/object_depth_detection/yolo_dependencies/yolov3.weights", "yolo_dependencies/yolov3.cfg")
-        self.classes = []
-        self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-        self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
-        with open("yolo_dependencies/coco.names", "r") as names:
+        self.net = cv2.dnn.readNet("/home/jnano/autonomous_robot/object_depth_detection/yolo_dependencies/yolov3-tiny.weights", "yolo_dependencies/yolov3-tiny.cfg")
+        self.classes = []        with open("yolo_dependencies/coco.names", "r") as names:
             self.classes = [line.strip() for line in names.readlines()]
         self.output_layers = [layer_name for layer_name in self.net.getUnconnectedOutLayersNames()]
         self.colors = np.random.uniform(0, 255, size=(len(self.classes), 3))
@@ -126,8 +123,6 @@ class YoloNet:
                 print("dpth = ", depth_coords_center[2])
                 print("x = ", depth_coords_center[0])
                 print("y = ", depth_coords_center[1])
-                #count = cv2.cuda.getCudaEnabledDeviceCount()
-                #print(count)
                 left_deep = [depth_coord_left[0], depth_coord_left[1]]
                 right_deep = [depth_coord_right[0], depth_coord_right[1]]
                 distance_2d = self.calculate_2d_distance(left_deep, right_deep)
@@ -135,10 +130,10 @@ class YoloNet:
                 cv2.putText(img, "x: {0:.3f}".format(depth_coords_center[0]), (center[0], center[1] - 75), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
                 cv2.putText(img, "y: {0:.3f}".format(depth_coords_center[1]), (center[0], center[1] - 85), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
                 cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
-                cv2.circle(img, tuple(center), 4, (255, 255, 255))
-                cv2.circle(img, tuple(left), 4, (255, 0, 255))
-                cv2.circle(img, tuple(right), 4, (120, 120, 0))
-                cv2.line(img, tuple(left), tuple(right), (120, 120, 0), 2)
+                cv2.circle(img, center, 4, (255, 255, 255))
+                cv2.circle(img, left, 4, (255, 0, 255))
+                cv2.circle(img, right, 4, (120, 120, 0))
+                cv2.line(img, left, right, (120, 120, 0), 2)
                 cv2.putText(img, "dist: {0:.3f}".format(distance_2d), (left[0], left[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1.2, (255, 255, 255), 2)
                 cv2.putText(img, label, (x, y - 5), font, 1, color, 1)
         cv2.imshow("Hehe", img)
@@ -176,8 +171,6 @@ class YoloNet:
             frame = color_frame
             height, width, channels = frame.shape
             blob, outputs = self.detect_objects(frame)
-            count = cv2.cuda.getCudaEnabledDeviceCount()
-            print(count)
             boxes, confs, class_ids, centers, lefts, rights = self.get_box_dimensions(outputs, height, width)
             self.draw_labels_depth(boxes, confs, class_ids, lefts, lefts, rights, frame)
             key = cv2.waitKey(1)

@@ -8,10 +8,10 @@ import math
 
 class YoloNet:
     def __init__(self):
-        self.net = cv2.dnn.readNet("/home/jnano/autonomous_robot/object_depth_detection/yolo_dependencies/yolov3.weights", "yolo_dependencies/yolov3.cfg")
+        self.net = cv2.dnn.readNet("/home/jnano/autonomous_robot/object_depth_detection/yolo_dependencies/yolov3-tiny.weights", "yolo_dependencies/yolov3-tiny.cfg")
         self.classes = []
-        self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-        self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+        #self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+        #self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
         with open("yolo_dependencies/coco.names", "r") as names:
             self.classes = [line.strip() for line in names.readlines()]
         self.output_layers = [layer_name for layer_name in self.net.getUnconnectedOutLayersNames()]
@@ -49,7 +49,7 @@ class YoloNet:
             for detect in result:
                 scores = detect[5:]
                 class_id = np.argmax(scores)
-                if class_id == 47:
+                if class_id == 49:
                     conf = scores[class_id]
                     if conf > 0.25:
                         center_x = int(detect[0] * width)
@@ -126,8 +126,7 @@ class YoloNet:
                 print("dpth = ", depth_coords_center[2])
                 print("x = ", depth_coords_center[0])
                 print("y = ", depth_coords_center[1])
-                #count = cv2.cuda.getCudaEnabledDeviceCount()
-                #print(count)
+
                 left_deep = [depth_coord_left[0], depth_coord_left[1]]
                 right_deep = [depth_coord_right[0], depth_coord_right[1]]
                 distance_2d = self.calculate_2d_distance(left_deep, right_deep)
@@ -176,8 +175,6 @@ class YoloNet:
             frame = color_frame
             height, width, channels = frame.shape
             blob, outputs = self.detect_objects(frame)
-            count = cv2.cuda.getCudaEnabledDeviceCount()
-            print(count)
             boxes, confs, class_ids, centers, lefts, rights = self.get_box_dimensions(outputs, height, width)
             self.draw_labels_depth(boxes, confs, class_ids, lefts, lefts, rights, frame)
             key = cv2.waitKey(1)

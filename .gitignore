@@ -1,4 +1,6 @@
 object_depth_detection/yolo_dependencies/*
 /object_depth_detection/yolo_dependencies/*
 __pycache__/
+object_depth_detection/ssd_dependencies/*
+/object_depth_detection/ssd_dependencies/*
 
