@@ -6,6 +6,7 @@ from depth_camera_control import *
 import math
 
 
+
 class YoloNet:
     def __init__(self):
         self.net = cv2.dnn.readNet("/home/jnano/autonomous_robot/object_depth_detection/yolo_dependencies/yolov3.weights", "yolo_dependencies/yolov3.cfg")
@@ -120,9 +121,9 @@ class YoloNet:
                 center = centers[i]
                 left = lefts[i]
                 right = rights[i]
-                depth_coords_center = dc.get_depth_coordinates(center[0], center[1])
-                depth_coord_left = dc.get_depth_coordinates(left[0], left[1])
-                depth_coord_right = dc.get_depth_coordinates(right[0], right[1])
+                depth_coords_center = dc.ssd_get_depth_coordinates(center[0], center[1])
+                depth_coord_left = dc.ssd_get_depth_coordinates(left[0], left[1])
+                depth_coord_right = dc.ssd_get_depth_coordinates(right[0], right[1])
                 print("dpth = ", depth_coords_center[2])
                 print("x = ", depth_coords_center[0])
                 print("y = ", depth_coords_center[1])
@@ -141,7 +142,7 @@ class YoloNet:
                 cv2.line(img, tuple(left), tuple(right), (120, 120, 0), 2)
                 cv2.putText(img, "dist: {0:.3f}".format(distance_2d), (left[0], left[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1.2, (255, 255, 255), 2)
                 cv2.putText(img, label, (x, y - 5), font, 1, color, 1)
-        cv2.imshow("Hehe", img)
+        cv2.imshow("YOLO - Tiny v3", img)
 
     def image_detect(sefl, img_path): 
         #model, classes, colors, output_layers = load_yolo()
@@ -171,8 +172,12 @@ class YoloNet:
 
     def depth_detect(self, dc):
         #model, classes, colors, output_layers = load_yolo()
+        counter = 0 
+        start_time = time.time()
+        x = 1 # displays the frame rate every 1 second
+        counter = 0
         while True:
-            ret, depth, color_frame, points, depth_frame_distance = dc.get_frame()
+            color_frame, depth_frame_distance = dc.ssd_get_frame()
             frame = color_frame
             height, width, channels = frame.shape
             blob, outputs = self.detect_objects(frame)
@@ -180,7 +185,13 @@ class YoloNet:
             print(count)
             boxes, confs, class_ids, centers, lefts, rights = self.get_box_dimensions(outputs, height, width)
             self.draw_labels_depth(boxes, confs, class_ids, lefts, lefts, rights, frame)
+            counter+=1
+            if (time.time() - start_time) > x :
+                print("FPS: ", counter / (time.time() - start_time))
+                counter = 0
+                start_time = time.time()
             key = cv2.waitKey(1)
+
             if key == 27:
                 break
         #cap.release()
