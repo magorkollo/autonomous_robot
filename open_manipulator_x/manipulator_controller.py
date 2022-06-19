@@ -104,7 +104,7 @@ class OpenManipulatorX(object):
     print("Available Planning Groups:", arm.get_group_names())
 
     print("Printing arm state")
-    print arm.get_current_state()
+    print(arm.get_current_state())
 
     self.box_name = ''
     self.arm = arm

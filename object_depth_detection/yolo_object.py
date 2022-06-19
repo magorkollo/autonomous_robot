@@ -9,7 +9,7 @@ import math
 
 class YoloNet:
     def __init__(self):
-        self.net = cv2.dnn.readNet("/home/jnano/autonomous_robot/object_depth_detection/yolo_dependencies/yolov3.weights", "yolo_dependencies/yolov3.cfg")
+        self.net = cv2.dnn.readNet("yolo_dependencies/yolov3.weights", "yolo_dependencies/yolov3.cfg")
         self.classes = []
         self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
         self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
@@ -20,7 +20,7 @@ class YoloNet:
     
     def load_image(img_path):
         img = cv2.imread(img_path)
-        img = cv2.resize(img, None, fx=0.4, fy=0.4)
+        img = cv2.resize(img, None, fx=0.8, fy=0.8)
         height, width, channels = img.shape
         return img, height, width, channels
     
@@ -142,7 +142,7 @@ class YoloNet:
                 cv2.line(img, tuple(left), tuple(right), (120, 120, 0), 2)
                 cv2.putText(img, "dist: {0:.3f}".format(distance_2d), (left[0], left[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1.2, (255, 255, 255), 2)
                 cv2.putText(img, label, (x, y - 5), font, 1, color, 1)
-        cv2.imshow("YOLO - Tiny v3", img)
+        cv2.imshow("YOLO - v3", img)
 
     def image_detect(sefl, img_path): 
         #model, classes, colors, output_layers = load_yolo()
