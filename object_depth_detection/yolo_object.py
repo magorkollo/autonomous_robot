@@ -239,4 +239,8 @@ class YoloNet:
 if __name__ == '__main__':
     yolo = YoloNet()
     yolo.normal_detection()
+<<<<<<< HEAD
     cv2.destroyAllWindows()
+=======
+    cv2.destroyAllWindows()
+>>>>>>> 241db205fd0d29b68cab1317dabed967bdd43ad6

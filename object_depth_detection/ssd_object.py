@@ -9,11 +9,14 @@ import numpy as np
 import time
 import math
 import pickle
+<<<<<<< HEAD
 from collections import Counter
 import rospy
 from geometry_msgs.msg import Point
 from std_msgs.msg import Float64MultiArray
 
+=======
+>>>>>>> 241db205fd0d29b68cab1317dabed967bdd43ad6
 
 neural_network = None
 display = None
@@ -133,9 +136,15 @@ class SSDNet():
                 local_list = [name_obj, depth_coords_center, distance_2d]
                 if all(i != 0 for i in depth_coords_center):
                     self.detection_list.append(local_list)
+<<<<<<< HEAD
             if (len(self.detection_list) > 12):
                 print("enough detections registered")
                 break
+=======
+                if (len(self.detection_list) > 12):
+                    print("enough detections registered")
+                    break
+>>>>>>> 241db205fd0d29b68cab1317dabed967bdd43ad6
             print("FPS: ", 1.0 / (time.time() - self.start_time))
             if (time.time() - self.start) > 5:
                 print("5 SEC OVER")
@@ -161,6 +170,7 @@ class SSDNet():
             self.display.Render(img)
 
 def process_list(object_list):
+<<<<<<< HEAD
     counter_list = []
     objects = Counter(objects[0] for objects in object_list).keys()
     objects = list(objects)
@@ -217,10 +227,14 @@ def empty_publish():
     pub.publish(msg)
     rospy.sleep(1)
 
+=======
+    pass
+>>>>>>> 241db205fd0d29b68cab1317dabed967bdd43ad6
 
 if __name__ == '__main__':
     ssd = SSDNet()
     ssd.depth_headless()
+<<<<<<< HEAD
     cv2.destroyAllWindows()
     object_list = ssd.get_detect_list()
     object_list = process_list(object_list)
@@ -234,3 +248,9 @@ if __name__ == '__main__':
             rospy.loginfo("no detections found")
             empty_publish()
     rospy.loginfo("stopped publishing, 30 secs OVER")
+=======
+    object_list = ssd.get_detect_list()
+    with open('object_list.txt', 'wb') as fp:
+        pickle.dump(object_list, fp)
+    cv2.destroyAllWindows()
+>>>>>>> 241db205fd0d29b68cab1317dabed967bdd43ad6
