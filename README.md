@@ -22,6 +22,7 @@ University of Cluj-Napoca, and I managed to won the 2022 edition of the
 
 ## Table of Contents
 
+- [Demos](#demos)
 - [Prerequisites](#prerequisites)
 - [Install](#install)
 - [Usage](#usage)
@@ -31,9 +32,18 @@ University of Cluj-Napoca, and I managed to won the 2022 edition of the
 	- [Perception](#perception)
 - [Architecture](#architecture)
 - [Controller workflow](#controller)
-- [Demos](#demos)
 - [Maintainers](#maintainers)
 - [License](#license)
+
+## Demos:
+
+The robot has been dissasembled, since I did not own it, however, I made some demo videos which can be found here:
+
+- [Pick and Place of objects detected with CNN](https://www.youtube.com/watch?v=K5yDvZ93HsU)
+- [Object localization with YOLOv3 and Intel Realsense D435i](https://www.youtube.com/watch?v=uUJGaNzQYHE)
+- [Autonomous Harvesting Robot demo with Jetson Nano](https://www.youtube.com/watch?v=b3MkhHlunDM)
+
+
 
 ## Prerequisites
 
@@ -48,7 +58,7 @@ completed by the [OpenManipulator-X](https://emanual.robotis.com/docs/en/platfor
 I use an [Intel Realsense D435i Depth Camera](https://www.intelrealsense.com/depth-camera-d435i/) for customized object detection and
 getting the object's coordinates in 3D space.
 
-The robot and its parts illustrated on the testing scene:
+Robot hardware:
 ![Robot's structure](img/waffle_parts.png)
 
 ## Install
@@ -224,14 +234,6 @@ Starting the perception node. Two neural networks have been trained for the obje
 
 - ssd: python3 ssd_object.py
 - yolo v3: python3 yolo_object.py
-
-## Demos:
-
-The robot has been dissasembled, since I did not own it, however, I made some demo videos which can be found here:
-
-- [Pick and Place of objects detected with CNN](https://www.youtube.com/watch?v=K5yDvZ93HsU)
-- [Object localization with YOLOv3 and Intel Realsense D435i](https://www.youtube.com/watch?v=uUJGaNzQYHE)
-- [Autonomous Harvesting Robot demo with Jetson Nano](https://www.youtube.com/watch?v=b3MkhHlunDM)
 
 
 ## Maintainers
