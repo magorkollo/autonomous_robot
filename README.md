@@ -40,11 +40,7 @@ The project is based on the [Robot Operaing System's](https://www.ros.org/)  [Me
 On the Hardware side, I was working with a [Jetson Nano Dev Kit](https://developer.nvidia.com/embedded/jetson-nano-developer-kit) used for controlling the robotic platform, which is a [Turtlebot3 Waffle](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/) completed by the [OpenManipulator-X](https://emanual.robotis.com/docs/en/platform/openmanipulator_x/overview/) robotic arm. In addition, I use an [Intel Realsense D435i Depth Camera](https://www.intelrealsense.com/depth-camera-d435i/) for customized object detection and getting the object's coordinates in 3D space.
 
 The robot on the testing scene:
-<<<<<<< HEAD
 ![Robot's structure](img/waffle_parts.png)
-=======
-![Robot's structure](http://url/to/img.png)
->>>>>>> 3ed03df9f8082ce4d1b091f5a3e6b3cefbf5ec57
 
 
 ## Install
