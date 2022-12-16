@@ -25,12 +25,14 @@ University of Cluj-Napoca, and I managed to won the 2022 edition of the
 - [Prerequisites](#prerequisites)
 - [Install](#install)
 - [Usage](#usage)
-	- [Generator](#generator)
-- [Badge](#badge)
-- [Example Readmes](#example-readmes)
-- [Related Efforts](#related-efforts)
+	- [Mapping](#mapping)
+	- [Navigation](#navigation)
+	- [Manipulation](#manipulation)
+	- [Perception](#perception)
+- [Architecture](#architecture)
+- [Controller workflow](#controller)
+- [Demos](#demos)
 - [Maintainers](#maintainers)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Prerequisites
@@ -128,6 +130,14 @@ server <server_ip> minpoll 0 maxpoll 5 maxdelay .05
 
 And it should work in the following. Source: I found this provided by lorenznew [here](https://answers.ros.org/question/298821/tf-timeout-with-multiple-machines/?answer=298908#post-id-298908)
 
+## Architecture
+
+![SW and HW Architecture](img/autonomous_robot_architecture.png)
+
+## Controller
+
+![Controller workflow](img/controller_flowchart.png)
+
 ## Usage
 
 There are going to be shown multiple use-cases here, in which the arm could be used. Now, just a short description about how to launch the robot and use together with the arm. 
@@ -144,6 +154,8 @@ Next in a new terminal window, we should connect to our **Jetson Nano, to bring 
 ssh name_of_jetson@wlan_ip_of_jetson
 roslaunch turtlebot3_bringup turtlebot3_robot.launch
 ```
+
+> **_NOTE:_**  The above two are pre-requisite for the following applications.
 
 ### Mapping
 
@@ -174,7 +186,19 @@ rosrun map_server map_saver -f ~\map_name
 
 ### Navigation
 
+Starting the navigation node:
 
+```sh
+roslaunch turtlebot3_navigation turtlebot3_navigation.launch \map_file:=$HOME/map_name.yaml
+```
+
+Sending the robot to a target waypoint:
+
+```sh
+python navigation_robot.py
+```
+
+### Manipulation
 
 For instance, for controlling the robotic arm, in the next phase we should make a connection **(bringup) the arm on our Remote PC**, by running the following command in a new terminal window:
 
@@ -189,48 +213,31 @@ In the following step, I am using [MoveIt!](http://docs.ros.org/en/melodic/api/m
 roslaunch open_manipulator_controllers joint_trajectory_controller.launch sim:=false
 ```
 
-https://answers.ros.org/question/196586/how-do-i-disable-execution_duration_monitoring/
-
-
-
-### Generator
-
-To use the generator, look at [generator-standard-readme](https://github.com/RichardLitt/generator-standard-readme). There is a global executable to run the generator in that package, aliased as `standard-readme`.
-
-## Badge
-
-If your README is compliant with Standard-Readme and you're on GitHub, it would be great if you could add the badge. This allows people to link back to this Spec, and helps adoption of the README. The badge is **not required**.
-
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-
-To add in Markdown format, use this code:
-
-```
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+Starting the manipulator API:
+```sh
+python manipulator_main.py
 ```
 
-## Example Readmes
+### Perception
 
-To see how the specification has been applied, see the [example-readmes](example-readmes/).
+Starting the perception node. Two neural networks have been trained for the object detection, under */object_depth_detection*:
 
-## Related Efforts
+- ssd: python3 ssd_object.py
+- yolo v3: python3 yolo_object.py
 
-- [Art of Readme](https://github.com/noffle/art-of-readme) - 💌 Learn the art of writing quality READMEs.
-- [open-source-template](https://github.com/davidbgk/open-source-template/) - A README template to encourage open-source contributions.
+## Demos:
+
+The robot has been dissasembled, since I did not own it, however, I made some demo videos which can be found here:
+
+- [Pick and Place of objects detected with CNN](https://www.youtube.com/watch?v=K5yDvZ93HsU)
+- [Object localization with YOLOv3 and Intel Realsense D435i](https://www.youtube.com/watch?v=uUJGaNzQYHE)
+- [Autonomous Harvesting Robot demo with Jetson Nano](https://www.youtube.com/watch?v=b3MkhHlunDM)
+
 
 ## Maintainers
 
-
-
-## Contributing
-
-Feel free to dive in! [Open an issue](https://github.com/RichardLitt/standard-readme/issues/new) or submit PRs.
-
-Standard Readme follows the [Contributor Covenant](http://contributor-covenant.org/version/1/3/0/) Code of Conduct.
-
-### Contributors
-
-
+There is no maintanence at this point, however you can ask me anything related to the project, by writing
+me on **magorors_kollo@yahoo.com** . I am open to any kind of critics or suggestions too. :)
 
 ## License
 
