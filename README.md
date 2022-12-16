@@ -9,7 +9,7 @@ Autonomous robots, computer vision and AI controlled applications are getting hi
 in our everyday life. Similarly, in the case of precision agriculture is the same, where the help
 of these robots could conduct a more efficient but also greener way of food production. 
 
-The main goal of this project is to develop a robotic platform which is capable of carrying out
+> The main goal of this project is to develop a robotic platform which is capable of carrying out
 agricultural activities, by integrating technological advances from the last years. The project
 is based on a mobile robotic platform equipped with a robotic arm and a depth camera, connected
 to an embedded computer. ROS is used to control the robot and AI algorithms are used to provide
