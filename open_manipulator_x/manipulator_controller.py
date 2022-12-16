@@ -147,13 +147,16 @@ class OpenManipulatorX(object):
   def gripper_open(self):
 
     joint_goal = self.move_group_gripper.get_current_joint_values()
-    joint_goal[0] = self.position_gripper_opened
+    if joint_goal[0] < 0.018:      
+      joint_goal[0] = self.position_gripper_opened
 
-    self.move_group_gripper.go(joint_goal, wait=True)
-    self.move_group_gripper.stop()
+      self.move_group_gripper.go(joint_goal, wait=True)
+      self.move_group_gripper.stop()
 
-    current_joints = self.move_group_gripper.get_current_joint_values()
-    return all_close(joint_goal, current_joints, 0.01)
+      current_joints = self.move_group_gripper.get_current_joint_values()
+      return all_close(joint_goal, current_joints, 0.01)
+    else:
+      rospy.loginfo("Gripper is already opened")
 
 
   def gripper_precision(self, open_percentage):

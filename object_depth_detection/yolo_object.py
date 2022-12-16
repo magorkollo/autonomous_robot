@@ -5,14 +5,15 @@ import time
 from depth_camera_control import *
 import math
 
-
+white = (255, 255, 255)
+red = (0, 0, 255)
 
 class YoloNet:
     def __init__(self):
-        self.net = cv2.dnn.readNet("/home/jnano/autonomous_robot/object_depth_detection/yolo_dependencies/yolov3-tiny.weights", "yolo_dependencies/yolov3-tiny.cfg")
+        self.net = cv2.dnn.readNet("yolo_dependencies/yolov3.weights", "yolo_dependencies/yolov3.cfg")
         self.classes = []
-        self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-        self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+        #self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+        #self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
         with open("yolo_dependencies/coco.names", "r") as names:
             self.classes = [line.strip() for line in names.readlines()]
         self.output_layers = [layer_name for layer_name in self.net.getUnconnectedOutLayersNames()]
@@ -124,10 +125,13 @@ class YoloNet:
     def draw_labels_depth(self, boxes, confs, class_ids, centers, lefts, rights, img): 
         indexes = cv2.dnn.NMSBoxes(boxes, confs, 0.5, 0.4)
         font = cv2.FONT_HERSHEY_PLAIN
+        obj_id = 0
         for i in range(len(boxes)):
             if i in indexes:
                 x, y, w, h = boxes[i]
-                label = str(self.classes[class_ids[i]])
+                obj_id = obj_id + 1
+                print(len(indexes))
+                label = str(self.classes[class_ids[i]]) + str(obj_id)
                 color = self.colors[i]
                 center = centers[i]
                 left = lefts[i]
@@ -141,17 +145,23 @@ class YoloNet:
                 left_deep = [depth_coord_left[0], depth_coord_left[1]]
                 right_deep = [depth_coord_right[0], depth_coord_right[1]]
                 distance_2d = self.calculate_2d_distance(left_deep, right_deep)
-                cv2.putText(img, "dpth: {0:.3f}".format(depth_coords_center[2]), (center[0], center[1] - 65), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
-                cv2.putText(img, "x: {0:.3f}".format(depth_coords_center[0]), (center[0], center[1] - 75), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
-                cv2.putText(img, "y: {0:.3f}".format(depth_coords_center[1]), (center[0], center[1] - 85), cv2.FONT_HERSHEY_PLAIN, 0.9, (255, 255, 255), 2)
-                cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
+                if(depth_coords_center[2] > 0.38):
+                    cv2.putText(img,"OUT OF REACH", (center[0], center[1] - 109), cv2.FONT_HERSHEY_PLAIN, 1.3, red, 2)
+                    cv2.rectangle(img, (x,y), (x+w, y+h), red, 3)
+                else:
+                    cv2.putText(img, label, (center[0], center[1] - 109), cv2.FONT_HERSHEY_PLAIN, 1, white, 2)
+                    cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
+                cv2.putText(img, "dpth: {0:.3f}".format(depth_coords_center[2]), (center[0], center[1] - 70), cv2.FONT_HERSHEY_PLAIN, 1, white, 2)
+                cv2.putText(img, "x: {0:.3f}".format(depth_coords_center[0]), (center[0], center[1] - 83), cv2.FONT_HERSHEY_PLAIN, 1, white, 2)
+                cv2.putText(img, "y: {0:.3f}".format(depth_coords_center[1]), (center[0], center[1] - 96), cv2.FONT_HERSHEY_PLAIN, 1, white, 2)
+                
+                
                 cv2.circle(img, tuple(center), 4, (255, 255, 255))
                 cv2.circle(img, tuple(left), 4, (255, 0, 255))
                 cv2.circle(img, tuple(right), 4, (120, 120, 0))
                 cv2.line(img, tuple(left), tuple(right), (120, 120, 0), 2)
-                cv2.putText(img, "dist: {0:.3f}".format(distance_2d), (left[0], left[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1.2, (255, 255, 255), 2)
-                cv2.putText(img, label, (x, y - 5), font, 1, color, 1)
-        cv2.imshow("YOLO - Tiny v3", img)
+                cv2.putText(img, "dist: {0:.3f}".format(distance_2d), (left[0], left[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1.2, white, 2)
+        cv2.imshow("YOLOv3", img)
 
     def calculate_depth(self, boxes, confs, class_ids, centers, lefts, rights, img): 
         indexes = cv2.dnn.NMSBoxes(boxes, confs, 0.5, 0.4)
@@ -229,8 +239,8 @@ class YoloNet:
             key = cv2.waitKey(1)
             if key == 27:
                 break
-            if (time.time() - self.start) > 10:
-                print("10 SEC OVER")
+            if (time.time() - self.start) > 60:
+                print("60 SEC OVER")
                 break
         self.dc.release()
         #cap.release()
@@ -238,9 +248,6 @@ class YoloNet:
 
 if __name__ == '__main__':
     yolo = YoloNet()
-    yolo.normal_detection()
-<<<<<<< HEAD
+    yolo.depth_display()
     cv2.destroyAllWindows()
-=======
-    cv2.destroyAllWindows()
->>>>>>> 241db205fd0d29b68cab1317dabed967bdd43ad6
+
