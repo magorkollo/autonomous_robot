@@ -3,7 +3,6 @@
 ## pwd by Turtlebot3 + nVidia Jetson + OpenManipulator
  
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)]
-(https://github.com/RichardLitt/standard-readme)
 
 Autonomous robots, computer vision and AI controlled applications are getting higher influence
 in our everyday life. Similarly, in the case of precision agriculture is the same, where the help
@@ -17,7 +16,9 @@ autonomy.'
 
 ~ intro of my license thesis.
 
-This project was my Bachelor's License (BSc) project in Computer Science & Automation at the Technical University of Cluj-Napoca, and I managed to won the
+This project was my Bachelor's License (BSc) project in Computer Science & Automation at the Technical
+University of Cluj-Napoca, and I managed to won the 2022 edition of the
+[CSSC](https://cs.utcluj.ro/cssc-2022.html) conference.
 
 
 1. [The specification](spec.md) for how a standard README should look.
