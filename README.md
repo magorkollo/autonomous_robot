@@ -97,8 +97,6 @@ export PYTHONPATH=$PYTHONPATH:/usr/local/lib
 export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.6/pyrealsense2
 ```
 
-### ...
-
 ### ROS Master-Slave with Jetson Nano
 
 In case of the Turtlebot the most common method to control your robot is to use a master-slave configuration. The ROS Master helps individual nodes to communicate with each other peer-to-peer, therefore it is also used for the communication of multiple robots. In case of the Jetson Nano, it does not have RTC backup power supply the clock will be reseted after powering off. If it does not have an ethernet/internet connection it won't know the current date and time, but in many cases even having the internet connection it just simply did not synchronize with current time. On the other hand, the remote PC and the Jetson have to be synchronized somehow, otherwise there could be problems in the communication (at least in case of the OpenManipulator controller). There could be multiple solutions, like [this](https://github.com/justsoft/jetson-nano-date-sync) but I have used [chrony](https://chrony.tuxfamily.org/)
@@ -146,6 +144,37 @@ Next in a new terminal window, we should connect to our **Jetson Nano, to bring 
 ssh name_of_jetson@wlan_ip_of_jetson
 roslaunch turtlebot3_bringup turtlebot3_robot.launch
 ```
+
+### Mapping
+
+For mapping the environment the SLAM node is launched and an RVIZ illustration of the environment is shown:
+
+```sh
+roslaunch turtlebot3_slam turtlebot3_slam.launch
+```
+
+Launching the teleoperation node to control the robot:
+
+```sh
+roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch
+```
+
+The operator has to guide the robot through the envirnment, and has to **Publish a point** at the target
+location and at the starting position, and saving them by echoing the published points:
+
+```sh
+rostopic echo /clicked_point
+```
+
+Save the map and close every node:
+
+```sh
+rosrun map_server map_saver -f ~\map_name
+```
+
+### Navigation
+
+
 
 For instance, for controlling the robotic arm, in the next phase we should make a connection **(bringup) the arm on our Remote PC**, by running the following command in a new terminal window:
 
