@@ -6,10 +6,14 @@
 (https://github.com/RichardLitt/standard-readme)
 
 Autonomous robots, computer vision and AI controlled applications are getting higher influence
-in our everyday life.Similarly, in the case of precision agriculture is the same, where the help
+in our everyday life. Similarly, in the case of precision agriculture is the same, where the help
 of these robots could conduct a more efficient but also greener way of food production. 
 
-The main goal of this project is to develop a robotic platform which is capable of carrying out agricultural activities, by integrating technological advances from the last years. The project is based on a mobile robotic platform equipped with a robotic arm and a depth camera, connected to an embedded computer. ROS is used to control the robot and AI algorithms are used to provide autonomy. 
+The main goal of this project is to develop a robotic platform which is capable of carrying out
+agricultural activities, by integrating technological advances from the last years. The project
+is based on a mobile robotic platform equipped with a robotic arm and a depth camera, connected
+to an embedded computer. ROS is used to control the robot and AI algorithms are used to provide
+autonomy. 
 
 This project was my Bachelor's License (BSc) project in Computer Science & Automation at the Technical University of Cluj-Napoca, and I managed to won the
 
