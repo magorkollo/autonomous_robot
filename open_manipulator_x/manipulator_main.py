@@ -39,9 +39,6 @@ def callb(data):
   else:
     pass
 
-
-
-
 def listener():
   coordinates_sub = rospy.Subscriber("/coordinates_of_detections", Float64MultiArray, callb)
   if ALL:
@@ -63,7 +60,7 @@ def showcase(open_manipulator_x):
     open_manipulator_x.go_to_joint_state(angles)
     print("go to the next arm position")
     raw_input()
-    angles = [degree_rad(-151), degree_rad(-17), degree_rad(21), degree_rad(-3)]
+    angles = [degree_rad(-90), degree_rad(1), degree_rad(1), degree_rad(-3)]
     open_manipulator_x.go_to_joint_state(angles)
     print("go to the next arm position")
     raw_input()
@@ -75,34 +72,82 @@ def showcase(open_manipulator_x):
     #angles = [0 ,-1.50 ,0.64 , 1.48]
     print("primary showcase is done")
 
+
 def main():
   try:
     open_manipulator_x = OpenManipulatorX()
     current_joint_angles = open_manipulator_x.get_joint_angles()
-    comparation = False
+    # angles = [degree_rad(0), degree_rad(-90), degree_rad(70), degree_rad(35)]
+    # print(angles)
+    # open_manipulator_x.go_to_joint_state(angles)
+    # rospy.sleep(6)
     coordinates_sub = rospy.Subscriber("/coordinates_of_detections", Float64MultiArray, callb)
     while True:
       if ALL:
-        print("GOT ALL OF THEM SHuTDOWN NEEDED")
         rospy.loginfo("GOT ALL OF THEM SHuTDOWN NEEDED")
         print(object_list)
         coordinates_sub.unregister()
         break
       else:
         listener()
-        print("ALL ===", ALL)
+        print("WAITING FOR DATA", ALL)
       if EMPTY:
-        print("EMPTY, NO OBJECT DETECTED")
         rospy.loginfo("EMPTY, NO OBJECT DETECTED")
         break
       rospy.sleep(1)
-      print("NEW LISTEN")
-    print("GOT ALL OF THEM SHuTDOWN NEEDED")
-    rospy.loginfo("GOT ALL OF THEM SHuTDOWN NEEDED")
+    print("Manipulator path planning starts:")
     print(object_list)
 
+    #open_manipulator_x.gripper_close()
+    if len(object_list) > 0:
+      open_manipulator_x.gripper_open()
+      rospy.sleep(1)
+      for i in range(len(object_list)):
+        coord0 = object_list[i][0]
+        coord1 = object_list[i][1]
+        coord2 = object_list[i][2]
+        dist = object_list[i][3]
+        print("COORD0 before IF = ", coord0)
+        if coord0 > 0:
+          coord0 = -coord0
+          coord0 = coord0 - 0.008
+          coord2 = coord2 + 0.04
+          coord1 = -0.02
+        else:
+          coord0 = abs(coord0) - 0.018
+          coord2 = coord2 + 0.075
+          coord1 = -0.05
+        print(coord0)
+        coords = [coord2, coord0,  -0.003]
+        print("======COORDS======== ", coords)
+        #coords = [coord2+0.04, coord1-0.05, -0.02]
+        try:
+          g_angle = pi/10
+          angles = open_manipulator_x.inverse_kinematics(coords, g_angle)
+          open_manipulator_x.go_to_joint_state(angles)
+          rospy.sleep(8)
+          open_manipulator_x.gripper_close()
+          rospy.sleep(2)
+          angles = [degree_rad(0), degree_rad(-57), degree_rad(17), degree_rad(40)]
+          open_manipulator_x.go_to_joint_state(angles)
+          rospy.sleep(8)
+          angles = [degree_rad(-90), degree_rad(1), degree_rad(1), degree_rad(-3)]
+          open_manipulator_x.go_to_joint_state(angles)
+          rospy.sleep(8)
+          open_manipulator_x.gripper_open()
+          rospy.sleep(2)
+          angles = [degree_rad(0), degree_rad(-90), degree_rad(70), degree_rad(35)]
+          open_manipulator_x.go_to_joint_state(angles)
+          rospy.sleep(8)
+          print("SUCCEEDED")
+          print(coords)
+        except ValueError:
+          print("not succedeed, math domain error...")
+          print(coords)
+          pass
+          rospy.sleep(3)
 
-
+    print("DONE")
     # if len(current_joint_angles) > 0 :
     #   comparation = all(joint == 0 for joint in current_joint_angles)
     # if comparation :
@@ -130,9 +175,6 @@ def main():
     #print(current_coordinates)
 
     
-    #open_manipulator_x.gripper_close()
-    raw_input()
-    open_manipulator_x.gripper_open()
     # print("go to predetermined coordinates ")
     # raw_input()
     # coords = [0.305+0.070, 0.0, 0.127-0.052]
@@ -140,9 +182,6 @@ def main():
     # angles = open_manipulator_x.inverse_kinematics(coords, g_angle)
     # print(angles)
     # open_manipulator_x.go_to_joint_state(angles)
-    raw_input()
-    print("fully close gripper")
-    open_manipulator_x.gripper_close()
     # raw_input()
     # angles = [degree_rad(0), degree_rad(-90), degree_rad(70), degree_rad(35)]
     # open_manipulator_x.go_to_joint_state(angles)

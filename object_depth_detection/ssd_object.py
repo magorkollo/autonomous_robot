@@ -120,9 +120,11 @@ class SSDNet():
             detections = self.neural_network.Detect(cuda_mem)
             counter = 0
             for detection in detections:
+                #if detection.ClassID
                 local_list = []
                 counter = counter + 1
                 name_obj = self.neural_network.GetClassDesc(detection.ClassID)+str(counter) # name of the class
+                print("Detection ID", str(detection.ClassID))
                 print(name_obj)
                 center = (int(detection.Center[0]), int(detection.Center[1]))
                 depth_coords_center = self.dc.ssd_get_depth_coordinates(center[0], center[1])

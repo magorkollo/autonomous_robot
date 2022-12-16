@@ -1,12 +1,14 @@
 # Autonomous Harvesting Robot Prototype
 
-## AI Robotics pwd by Turtlebot3 + nVidia Jetson + OpenManipulator
+## pwd by Turtlebot3 + nVidia Jetson + OpenManipulator
  
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-Autonomous robots, computer vision and AI controlled applications are starting to have higher and higher influence in our everyday life. It is the same case for precision agriculture, where the help of these robots could conduct a more efficient but also greener way of food production. 
+Autonomous robots, computer vision and AI controlled applications are getting higher influence in our everyday life. Similarly, in the case of precision agriculture is the same, where the help of these robots could conduct a more efficient but also greener way of food production. 
 
-This project is supposed is supposed to be my Bachelor's License (BSc) project in Computer Science & Automation at the Technical University of Cluj-Napoca, where I intend to ... 
+The main goal of this project is to develop a robotic platform which is capable of carrying out agricultural activities, by integrating technological advances from the last years. The project is based on a mobile robotic platform equipped with a robotic arm and a depth camera, connected to an embedded computer. ROS is used to control the robot and AI algorithms are used to provide autonomy. 
+
+This project was my Bachelor's License (BSc) project in Computer Science & Automation at the Technical University of Cluj-Napoca, and I managed to won the
 
 
 1. [The specification](spec.md) for how a standard README should look.
