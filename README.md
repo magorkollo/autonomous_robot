@@ -35,37 +35,43 @@ University of Cluj-Napoca, and I managed to won the 2022 edition of the
 
 ## Prerequisites
 
-The project is based on the [Robot Operaing System's](https://www.ros.org/)  [Melodic Distro](http://wiki.ros.org/melodic). One should start with the installation steps provided by the ROS platform. The recommended OS is [Ubuntu 18.04](https://releases.ubuntu.com/18.04/) for the Master PC and [JetPack 4.6] for the Jetson Nano since it has been tested only in this configuration, but it should be working fine on other Linux-based systems too.
+The project is based on the [Robot Operaing System's](https://www.ros.org/)  [Melodic Distro](http://wiki.ros.org/melodic).
+One should start with the installation steps provided by the ROS platform. The recommended OS is
+[Ubuntu 18.04](https://releases.ubuntu.com/18.04/) for the Master PC and [JetPack 4.6] for the Jetson Nano since
+it has been tested only in this configuration, but it should be working fine on other Linux-based systems too.
 
-On the Hardware side, I was working with a [Jetson Nano Dev Kit](https://developer.nvidia.com/embedded/jetson-nano-developer-kit) used for controlling the robotic platform, which is a [Turtlebot3 Waffle](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/) completed by the [OpenManipulator-X](https://emanual.robotis.com/docs/en/platform/openmanipulator_x/overview/) robotic arm. In addition, I use an [Intel Realsense D435i Depth Camera](https://www.intelrealsense.com/depth-camera-d435i/) for customized object detection and getting the object's coordinates in 3D space.
+On the Hardware side, I was working with a [Jetson Nano Dev Kit](https://developer.nvidia.com/embedded/jetson-nano-developer-kit)
+used for controlling the robotic platform, which is a [Turtlebot3 Waffle](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/)
+completed by the [OpenManipulator-X](https://emanual.robotis.com/docs/en/platform/openmanipulator_x/overview/) robotic arm. In addition,
+I use an [Intel Realsense D435i Depth Camera](https://www.intelrealsense.com/depth-camera-d435i/) for customized object detection and
+getting the object's coordinates in 3D space.
 
-The robot on the testing scene:
+The robot and its parts illustrated on the testing scene:
 ![Robot's structure](img/waffle_parts.png)
-
 
 ## Install
 
 ### D435i Depth Camera
 
-For using the camera one should install the realsense2 SDK's [ROS wrapper](https://github.com/IntelRealSense/realsense-ros) by typing:
+For using the camera one should install the realsense2 SDK's ROS Wrapper by typing:
 
 ```sh
 $ sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
 ```
 
-Unfortunately, in case of the ARM arhictectures it does not work, so one has to build both the ROS package from source:
+> **_NOTE:_**  Because of the introduction of ROS2, the ROS1 has recently been deprecated, and tnstallation links may get too for ROS1.
 
-```sh
-THIS PART HAS TO BE UPDATED...
-```
+Unfortunately, in case of the ARM arhictectures this installer does not work, so one has to build both the ROS package from source, detailed
+guide can be found on the [ROS wrapper's](https://github.com/IntelRealSense/realsense-ros/tree/ros1-legacy) page.
 
-Moreover, the [Python wrapper](https://pypi.org/project/pyrealsense2/) for the Intel RealSense SDK2.0 is also needed, which provides C++ to Python binding (maybe at some point I am going to use C++ instead of Python)
+Moreover, the [Python wrapper](https://pypi.org/project/pyrealsense2/) for the Intel RealSense SDK2.0 is also needed, which provides C++
+to Python binding.
 
 ```sh
 $ pip install pyrealsense2
 ```
 
-In case of the SDK's Python wrapper the situation is the same (if it has not been resolved in the meantime) it does not work with the ARM processors, therefore we need to build it from source:
+> **_NOTE:_**  In case of the SDK's Python wrapper the situation is the same (if it has not been resolved in the meantime) it does not work with the ARM processors, therefore we need to build it from source:
 
 ```sh
 $ git clone https://github.com/IntelRealSense/librealsense.git
